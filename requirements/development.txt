@@ -1,0 +1,18 @@
+-r base.txt
+
+#Testing
+pytest
+pytest-django
+pytest-sugar
+pytest-cov
+black==23.9.1
+
+
+ipdb
+random-word
+
+django-debug-toolbar==2.2.1
+pylint-django==2.4.2
+
+#date
+freezegun 

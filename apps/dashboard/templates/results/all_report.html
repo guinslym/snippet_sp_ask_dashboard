@@ -1,0 +1,53 @@
+<!-- templates/home.html -->
+{% extends 'base/base.html' %}
+{% load static %}
+{% load search_helper %}
+
+
+{% block content %}
+
+
+<h1>Reports</h1>
+
+<h3>Queue</h3>
+<ul>
+    <li>
+        <a href="{% url 'download_queue_assignment' %}">
+            Queue Staffing Assignement Report
+        </a>    
+    </li>
+    <li>
+        <a href="{% url 'display_queue_assignments' %}">
+            Queue Staffing Assignement Report - Web view
+        </a>    
+    </li>
+</ul>
+
+<h3>Chat</h3>
+<ul>
+    <li>
+        <a href="{% url 'report_on_chats' %}">
+            Chat Duration
+        </a>    
+    </li>
+    <li>
+        <a href="#">
+            Chat Average
+        </a>    
+    </li>
+    <li>
+        <a href="#">
+            Unanswered Chat
+        </a>    
+    </li>
+    <li>
+        <a href="#">
+            Chord Diagram
+        </a>    
+    </li>
+</ul>
+
+
+
+
+{% endblock %}

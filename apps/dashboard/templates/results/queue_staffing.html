@@ -1,0 +1,44 @@
+
+
+{% block content %}
+<H1><a href="{% url 'report_all_' %}">Rerturn to All Report Page</a></H1>
+
+<!-- Add Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-DnxrPTUlBeSCt4J8bGwRVfH9AcHHV5TBKZnIBPZfhrVgBztMgjqsqVhKOCm2z06k" crossorigin="anonymous">
+
+<!-- Add Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js" integrity="sha512-jxSwakK0CU6BCv8Mmp4X4k+qAmZVthtb5uCUOMC/oaE4OEq+d3b7r2G5OcOeMhaNsAAWS30ALw/d9IMFAJD+OQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-buEfCRQxUpXBfHMQ1fw8T+Q3c+IF/W4N9s0xvEd5GcOYtMFfIj/hlzJnP1A5tdf5" crossorigin="anonymous"></script>
+
+
+<!-- Include the necessary CSS and JS for PivotTable.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js" integrity="sha512-XgJh9jgd6gAHu9PcRBBAp0Hda8Tg87zi09Q2639t0tQpFFQhGpeCgaiEFji36Ozijjx9agZxB0w53edOFGCQ0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css" integrity="sha512-BDStKWno6Ga+5cOFT9BUnl9erQFzfj+Qmr5MDnuGqTQ/QYDO1LPdonnF6V6lBO6JI13wg29/XmPsufxmCJ8TvQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<div id="output"></div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/themes/base/jquery-ui.min.css" integrity="sha512-F8mgNaoH6SSws+tuDTveIu+hx6JkVcuLqTQ/S/KJaHJjGc8eUxIrBawMnasq2FDlfo7FYsD8buQXVwD+0upbcA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/jquery-ui.min.js" integrity="sha512-MlEyuwT6VkRXExjj8CdBKNgd+e2H+aYZOCUaCrt9KRk6MlZDOs91V1yK22rwm8aCIsb5Ec1euL8f0g58RKT/Pg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.7/metisMenu.css" integrity="sha512-Dovl+OCTZYdn+CwnU7ChS28VCZ1lDlhpZUpDIFvYtW8y20+lcZeWYnQrILYfGhcXSgzeXVhgjwQP39zfbdDPQw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.7/metisMenu.min.js" integrity="sha512-o36qZrjup13zLM13tqxvZTaXMXs+5i4TL5UWaDCsmbp5qUcijtdCFuW9a/3qnHGfWzFHBAln8ODjf7AnUNebVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script type="text/javascript">
+    $(function() {
+        // JSON data passed from the Django view
+        var userQueueData = {{ user_queue_data|safe }};
+        
+        // Create the pivot table
+        $("#output").pivotUI(
+            userQueueData,
+            {
+                rows: ["operator"],
+                cols: ["queue"],
+                vals: ["assigned"],
+                aggregatorName: "Count",
+                rendererName: "Table"
+            }
+        );
+    });
+</script>
+
+{% endblock %}

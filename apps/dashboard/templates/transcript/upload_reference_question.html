@@ -1,0 +1,31 @@
+<!-- templates/home.html -->
+{% extends 'base/base.html' %}
+{% load static %}
+{% load search_helper %}
+
+{% block content %}
+
+    <!-- List of uploaded documents -->
+
+        <!-- Upload form. Note enctype attribute! -->
+
+
+
+        <div class="container">
+            
+            <form action="{% url 'upload_reference_question_file' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <p>{{ form.non_field_errors }}</p>
+                <p>{{ form.docfile.label_tag }} {{ form.docfile.help_text }}</p>
+                <p>
+                    {{ form.docfile.errors }}
+                    {{ form.docfile }}
+                </p>
+                <p><input type="submit" value="Upload" /></p>
+            </form>
+        
+        </div>
+        
+        
+        
+        {% endblock content %}

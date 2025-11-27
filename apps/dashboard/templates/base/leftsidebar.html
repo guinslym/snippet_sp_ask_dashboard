@@ -1,0 +1,204 @@
+<div class="vertical-menu">
+
+    <div data-simplebar class="h-100">
+
+        <!--- Sidemenu -->
+        <div id="sidebar-menu">
+            <!-- Left Menu Start -->
+            <ul class="metismenu list-unstyled" id="side-menu">
+                <li class="menu-title">Menu</li>
+
+                <li>
+                    <a href="{% url 'homepage' %}" class="waves-effect">
+                        <i class="ri-home-2-line"></i>
+                        <span>Home</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-filter-line"></i>
+                        <span>Meetings</span> <!-- Replace SEARCH by FILTER (icon) <i class="ri-filter-line"></i>
+                                                 and create SEARCH only to access the MULTIFORM search page (search icon) 
+                                                
+                                                For CRONJOBS <i class="ri-shield-flash-line"></i>
+                                                -->
+                            
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{% url 'get_vr_meeting' %}">Vr Steering </a></li>
+                        <li><a href="{% url 'get_vr_meeting' %}">WCS meeting</a></li>
+                        <li><a href="{% url 'get_vr_meeting' %}">Schools</a></li>
+                        
+                    </ul>
+                </li>
+
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-pie-chart-line"></i>
+                        <span>Reports </span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{% url 'get_download_list_of_all_reference_question' %}">Download all reference questions</a></li>
+                        <li><a href="{% url 'upload_reference_question_file' %}">Upload file  Reference questions file</a></li>
+                       <li><a href="{% url 'download_lh3_api_report' %}">Download LH3 API Report</a></li>
+                    </ul>
+                </li>
+                <!--
+                    
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-pie-chart-line"></i>
+                        <span>Report </span>
+                    </a> 
+                    <ul class="sub-menu" aria-expanded="false">
+                       <li><a href="{% url 'pivot_table_chats_per_schools' %}">Chat per schools</a></li>
+                        <li><a href="{% url 'daily_report' %}"  onclick="myFunction('Note: The Daily Report can take up to 2 min to generate')"><i class="ri-timer-line"></i>Daily Report</a></li>
+                        <li><a href="{% url 'pivotTableOperatorAssignment' %}" onclick="myFunction('Note: This Pivot Table can take up to 2 min to generate')"><i class="ri-timer-line"></i>Operator Assignments</a></li>
+                        <li><a href="{% url 'download_excel_file_Operator_Assignment' %}"  onclick="myFunction('Note: The Report can take up to 2 min to generate')"><i class="ri-download-line"></i>Download Operator Assignments</a></li>
+                        <li><a href="{% url 'chord_diagram' %}"><i class="ri-file-chart-line"></i>Chord Diagram</a></li>
+                        <li><a href="{% url 'download_in_xslx_report_for_this_year' %}"><i class="ri-download-line"></i>Operator report for this year</a></li>
+                        <script>
+                            function myFunction(msg) {
+                              alert(msg);
+                            }
+                            </script>   
+                         
+                    </ul>
+                </li>
+            -->
+
+                <li>
+                    <a href="{% url 'get_list_of_users' %}"  class=" waves-effect">
+                        <i class="ri-folder-user-line"></i>
+                        <span>Operators</span>
+                    </a>
+                </li>
+
+                
+                <li>
+                    <a href="{% url 'get_list_of_queues' %}" class=" waves-effect">
+                        <i class="ri-record-mail-line"></i>
+                        <span>Queues</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="{% url 'get_list_of_profiles' %}" class=" waves-effect">
+                        <i class="ri-profile-line"></i>
+                        <span>Profiles</span>
+                    </a>
+                </li>
+                
+                <li>
+                    <a href="{% url 'get_list_of_faqs' %}" class=" waves-effect">
+                        <i class="ri-chat-check-line"></i>
+                        <span>FAQs</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ca.libraryh3lp.com/webclient/client" target="_blank" class=" waves-effect">
+                        <i class="ri-chat-forward-line"></i>
+                        <span>LH3 Webclient <i class="ri-external-link-line"></i></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://ca.libraryh3lp.com/dashboard/" target="_blank" class=" waves-effect">
+                        <i class="ri-chat-poll-line"></i>
+                        <span>LH3 Dashboard <i class="ri-external-link-line"></i></span>
+                    </a>
+                </li>
+                <!--
+                <li>
+                    <a href=""  class=" waves-effect">
+                        <i class="ri-building-4-line"></i>
+                        <span>Reference Question</span>
+                    </a>
+                </li>
+            -->
+
+            <li>
+                <a href="javascript: void(0);" class="has-arrow waves-effect">
+                    <i class="ri-pie-chart-2-line"></i>
+                    <span>Charts</span> <!-- 
+                        https://remixicon.com/
+                        Replace SEARCH by FILTER (icon) <i class="ri-filter-line"></i>
+                                             and create SEARCH only to access the MULTIFORM search page (search icon) 
+                                            
+                                            For CRONJOBS <i class="ri-shield-flash-line"></i>
+                                            -->
+                        
+                </a>
+                <ul class="sub-menu" aria-expanded="false"> 
+                    <li><a href="{% url 'download_calplot_for_the_service' %}">Calendar Heatmap</a></li>
+                    <li><a href="{% url 'download_calplot_for_the_service_stratified' %}">Calendar Heatmap-ColorC</a></li>
+   
+                </ul>
+            </li>
+            <li>
+                <a href="{% url 'search_transcript_with_in_multifield_form' %}">
+                    <i class="ri-search-2-line"></i> Search</a>
+            </li> 
+
+
+
+
+
+
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-filter-line"></i>
+                        <span>Predefined Search </span> <!-- Replace SEARCH by FILTER (icon) <i class="ri-filter-line"></i>
+                                                 and create SEARCH only to access the MULTIFORM search page (search icon) 
+                                                
+                                                For CRONJOBS <i class="ri-shield-flash-line"></i>
+                                                -->
+                            
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{% url 'get_unanswered_chats' %}">Unanswered Chats</a></li>
+                        <li><a href="{% url 'get_chats_from_yesterday' %}">Yesterday</a></li>
+                        <li><a href="{% url 'get_chats_from_yesterday_sample_size' %}">20% Sample of Yesterday</a></li>
+                        <li><a href="{% url 'get_chats_from_yesterday_from_mentees' %}">Mentees (Yesterday)</a></li>
+                        <li><a href="{% url 'get_last_weekend_chats' %}">Last Weekend</a></li>
+                        <li><a href="{% url 'search_transcript_that_was_transferred' %}">Search chat that was transfered</a></li> 
+                        <li><a href="{% url 'search_transcript_that_contains_file_transfer' %}">Search chat contains file transfer</a></li> 
+                        <li><a href="{% url 'get_chats_by_exit_survey_timestamp' %}">Search chat by Exit Survey timestamp</a></li> 
+                        
+
+                        
+                    </ul>
+                </li>
+
+                <!--
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-umbrella-line"></i>
+                        <span>CronJobs</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false"> 
+                        <li><a href="{% url 'get_unanswered_chats' %}">Unanswered Chats</a></li>                        
+                    </ul>
+                </li>
+                 -->
+
+
+                 <!--
+                
+                <li>
+                    <a href=""  class=" waves-effect">
+                        <i class="ri-building-4-line"></i>
+                        <span>Surveys</span>
+                    </a>
+                </li>
+                -->
+
+
+
+            </ul>
+        </div>
+        <!-- Sidebar -->
+    </div>
+</div>

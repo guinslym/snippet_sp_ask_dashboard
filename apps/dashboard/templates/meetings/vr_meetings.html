@@ -1,0 +1,1085 @@
+<!-- templates/home.html -->
+{% extends 'base/base.html' %}
+{% load static %}
+{% load search_helper %}
+{% block content %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" referrerpolicy="no-referrer" />
+<style>
+   .fa-frown-open {
+   color: rgb(255, 30, 0);
+   }
+   .fa-smile {
+   color: rgba(17, 173, 245, 0.979);
+   }
+</style>
+<style>
+   .rotate{
+   -moz-transition: all 2s linear;
+   -webkit-transition: all 2s linear;
+   transition: all 2s linear;
+   }
+   .rotate.down{
+   -ms-transform: rotate(180deg);
+   -moz-transform: rotate(180deg);
+   -webkit-transform: rotate(180deg);
+   transform: rotate(180deg);
+   }
+</style>
+<div class="row">
+   <div class="col-xl-8">
+      <div class="row">
+         <div class="col-md-4">
+            <div class="card">
+               <div class="card-body">
+                  <div class="media">
+                     <div class="media-body overflow-hidden">
+                        <p class="text-truncate font-size-14 mb-2">Web</p>
+                        <h4 class="mb-0 web-service " 
+                           data-toggle="tooltip" 
+                           data-html="true" 
+                           title="{{web_service | safe}}" 
+                           data-placement="bottom" 
+                           > 
+                           <i class="fa fa-spinner fa-spin"></i>
+                        </h4>
+                     </div>
+                     <div class="text-primary">
+                        <i class=" font-size-24"></i>
+                     </div>
+                     <style>
+                        #off.fa-toggle-off{
+                        color:red;
+                        }
+                     </style>
+                     <div class="media-body overflow-hidden">
+                        <p class="text-truncate font-size-14 mb-2">SMS</p>
+                        <h4 class="mb-0 sms-service" 
+                           data-toggle="tooltip" 
+                           data-html="true" 
+                           title="<em>SMS:</em> at least <i>12 queues opened out of </i> <b> 17</b>" 
+                           data-placement="bottom" 
+                           >  
+                           <i class="fa fa-spinner fa-spin"></i>
+                        </h4>
+                     </div>
+                     <div class="text-primary">
+                        <i class=" font-size-24"></i>
+                     </div>
+                     <div class="media-body overflow-hidden">
+                        <p class="text-truncate font-size-14 mb-2">FR</p>
+                        <h4 class="mb-0 fr-service" 
+                           data-toggle="tooltip" 
+                           data-html="true" 
+                           title="{{fr_service | safe}}" 
+                           data-placement="bottom" 
+                           >  
+                           <i class="fa fa-spinner fa-spin"></i>
+                        </h4>
+                     </div>
+                     <div class="text-primary">
+                        <i class="fas fa-wifi"></i>
+                     </div>
+                  </div>
+               </div>
+               <div class="card-body border-top py-3">
+                  <div class="text-truncate">
+                     <span class="badge badge-soft-success font-size-11"><i class="mdi mdi-menu-up"> </i> 
+                     <span class="time_now_service"> {% now "m/d/Y - H:i:s" %} </span>  </span>
+                     <span class="text-muted ml-2">Last time checked</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-4">
+            <div class="card">
+               <div class="card-body">
+                  <div class="media">
+                     <div class="media-body overflow-hidden">
+                        <p class="text-truncate font-size-14 mb-2">Total chats this month</p>
+                        <h4 class="mb-0 total_chat_this_month">
+                           <i class="fa fa-spinner fa-spin"></i>
+                        </h4>
+                     </div>
+                     <div class="text-primary">
+                        <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+               <div class="card-body border-top py-3">
+                  <div class="text-truncate">
+                     <span class="badge badge-soft-success font-size-11">
+                     <span class="time_now_this_month"> {% now "m/d/Y - H:i:s" %} </span> </span>
+                     <span class="text-muted ml-2">Last time checked</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="col-md-4">
+            <div class="card">
+               <div class="card-body">
+                  <div class="media">
+                     <div class="media-body overflow-hidden">
+                        <p class="text-truncate font-size-14 mb-2">Total chats this day</p>
+                        <h4 class="mb-0  total_chat_today ">
+                           <i class="fa fa-spinner fa-spin"></i>
+                        </h4>
+                     </div>
+                     <div class="text-primary">
+                        <i class="ri-home-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+               <div class="card-body border-top py-3">
+                  <div class="text-truncate">
+                     <span class="badge badge-soft-success font-size-11"> 
+                     <span class="time_now_this_day"> {% now "m/d/Y - H:i:s" %} </span> </span>
+                     <span class="text-muted ml-2">Last time checked</span>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end row -->
+      <div class="card">
+         <div class="card-body">
+            <div class="float-right d-none d-md-inline-block">
+               <div class="btn-group mb-2">
+                  <!--    <button type="button" class="btn btn-sm btn-light">Today</button>
+                     <button type="button" class="btn btn-sm btn-light active">Monthly</button> -->
+               </div>
+            </div>
+            <h4 class="card-title mb-4">Total Chats: ({{last_year | safe }} - blue bar chart) Vs ({{this_year| safe}} - green line chart) <i class="fas fa-wifi" style="color:red;"></i></h4>
+            <div>
+               <div id="line-column-chart" class="apex-charts" dir="ltr"></div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="col-lg-4">
+      <div class="card">
+         <div class="card-body">
+            <h4 class="card-title mb-4">
+               <span id="live-time"></span>
+               ::Operator currently online => {{total_operator_online|length}}    
+            </h4>
+            <div data-simplebar="init" style="max-height: 452px;min-height: 452px;">
+               <div class="simplebar-wrapper" style="margin: 0px;">
+                  <div class="simplebar-height-auto-observer-wrapper">
+                     <div class="simplebar-height-auto-observer"></div>
+                  </div>
+                  <div class="simplebar-mask">
+                     <div class="simplebar-offset" style="right: -17px; bottom: 0px;">
+                        <div class="simplebar-content-wrapper" style="height: auto; overflow: hidden scroll;">
+                           <div class="simplebar-content" style="padding: 0px;">
+                              <div class="table-responsive">
+                                 <table class="table table-hover mb-0"  id="myDataTableUsersOnline">
+                                    <thead>
+                                       <tr>
+                                          <th>username</th>
+                                          <th>status</th>
+                                          <th>answered/total chats</th>
+                                       </tr>
+                                    </thead>
+                                 </table>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="simplebar-placeholder" style="width: auto; height: 572px;"></div>
+               </div>
+               <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                  <div class="simplebar-scrollbar" style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+               </div>
+               <div class="simplebar-track simplebar-vertical" style="visibility: visible;">
+                  <div class="simplebar-scrollbar" style="height: 190px; transform: translate3d(0px, 140px, 0px); display: block;"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+
+
+
+
+
+</div>
+</div>
+
+ 
+
+<div class="col-xl-12">
+
+
+
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                    <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                        <p class="text-truncate font-size-14 mb-2">Total chats this SMS services</p>
+                        <img src="{% static 'images/tmp_file/texting_chats_by_month.png' %}" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                    </div>
+                    <div class="text-primary">
+                        <i class="ri-building-3-line font-size-24"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                    <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                        <p class="text-truncate font-size-14 mb-2">Total chats FR services</p>
+                        <img src="{% static 'images/tmp_file/fr_chats_by_month.png' %}" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                    </div>
+                    <div class="text-primary">
+                        <i class="ri-building-3-line font-size-24"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                    <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                        <p class="text-truncate font-size-14 mb-2">Total chats duration</p>
+                        <img src="https://placehold.co/600x400" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                    </div>
+                    <div class="text-primary">
+                        <i class="ri-building-3-line font-size-24"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ </div>
+
+</div>
+
+<div class="col-xl-12">
+   <div class="row">
+
+      <div class="col-lg-6">
+         <div class="card">
+               <div class="card-body">
+                  <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                     <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                           <p class="text-truncate font-size-14 mb-2">Running Totals</p>
+                           <img src="https://placehold.co/600x400" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                     </div>
+                     <div class="text-primary">
+                           <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </div>
+
+      <div class="col-lg-6">
+         <div class="card">
+            <div class="card-body">
+               <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                     <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                        <p class="text-truncate font-size-14 mb-2">Total chats duration</p>
+                        <img src="https://placehold.co/600x400" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                     </div>
+                     <div class="text-primary">
+                        <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+               </div>
+            </div>
+         </div>
+   </div>
+
+   </div>
+</div>
+
+
+<div class="col-xl-12">
+
+   <div class="row">
+
+      <div class="col-lg-12">
+         <div class="card">
+               <div class="card-body">
+                  <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                     <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                           <p class="text-truncate font-size-14 mb-2">Github heatmap</p>
+                           <img src="https://raw.githubusercontent.com/chiochio/commit-flooder/master/happy-heat-map.png" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                     </div>
+                     <div class="text-primary">
+                           <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </div>
+
+
+
+
+   </div>
+
+
+
+
+</div>
+
+
+<div class="col-xl-12">
+
+   <div class="row">
+
+      <div class="col-lg-6">
+         <div class="card">
+               <div class="card-body">
+                  <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                     <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                           <p class="text-truncate font-size-14 mb-2">Chord Diagram Schools</p>
+                           <img src="https://i.stack.imgur.com/JIqV9.png" alt="" class="img-fluid"> <!-- Added img-fluid for responsive images -->
+                     </div>
+                     <div class="text-primary">
+                           <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </div>
+
+
+      <div class="col-lg-6">
+         <div class="card">
+               <div class="card-body">
+                  <div class="media justify-content-center"> <!-- Added justify-content-center -->
+                     <div class="media-body overflow-hidden text-center"> <!-- Added text-center -->
+                           <p class="text-truncate font-size-14 mb-2">Active operator Distributions</p>
+                           <div id="chartdiv"></div>
+                     </div>
+                     <div class="text-primary">
+                           <i class="ri-building-3-line font-size-24"></i>
+                     </div>
+                  </div>
+               </div>
+         </div>
+      </div>
+
+
+   </div>
+
+
+
+
+</div>
+
+
+
+ <hr style="margin-bottom:40px">
+
+{% endblock %}
+
+
+
+
+
+{% block jscript %}
+
+<script src="https://unpkg.com/rough-viz@2.0.5"></script>
+
+<!-- Styles -->
+<style>
+   #chartdiv {
+     width: 100%;
+     height: 500px;
+   }
+   </style>
+   
+   <!-- Resources -->
+   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+   <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+   
+   <!-- Chart code -->
+   <script>
+new roughViz.Donut({
+  element: "#viz",
+  data: {
+    labels: ["a", "b", "c"],
+    values: [20, 10, 5]
+  },
+  colors: ["#0bd", "#fc2", "#f99"]
+});
+
+
+   am5.ready(function() {
+   
+   // Create root element
+   // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+   var root = am5.Root.new("chartdiv");
+   
+   // Set themes
+   // https://www.amcharts.com/docs/v5/concepts/themes/
+   root.setThemes([
+     am5themes_Animated.new(root)
+   ]);
+   
+   // Create chart
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/
+   var chart = root.container.children.push(am5xy.XYChart.new(root, {
+     panX: true,
+     panY: true,
+     wheelX: "panX",
+     wheelY: "zoomX",
+     pinchZoomX: true,
+     paddingLeft:0,
+     paddingRight:1
+   }));
+   
+   // Add cursor
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+   var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+   cursor.lineY.set("visible", false);
+   
+   
+   // Create axes
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+   var xRenderer = am5xy.AxisRendererX.new(root, { 
+     minGridDistance: 30, 
+     minorGridEnabled: true
+   });
+   
+   xRenderer.labels.template.setAll({
+     rotation: -90,
+     centerY: am5.p50,
+     centerX: am5.p100,
+     paddingRight: 15
+   });
+   
+   xRenderer.grid.template.setAll({
+     location: 1
+   })
+   
+   var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+     maxDeviation: 0.3,
+     categoryField: "country",
+     renderer: xRenderer,
+     tooltip: am5.Tooltip.new(root, {})
+   }));
+   
+   var yRenderer = am5xy.AxisRendererY.new(root, {
+     strokeOpacity: 0.1
+   })
+   
+   var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+     maxDeviation: 0.3,
+     renderer: yRenderer
+   }));
+   
+   // Create series
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+   var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+     name: "Series 1",
+     xAxis: xAxis,
+     yAxis: yAxis,
+     valueYField: "value",
+     sequencedInterpolation: true,
+     categoryXField: "country",
+     tooltip: am5.Tooltip.new(root, {
+       labelText: "{valueY}"
+     })
+   }));
+   
+   series.columns.template.setAll({ cornerRadiusTL: 5, cornerRadiusTR: 5, strokeOpacity: 0 });
+   series.columns.template.adapters.add("fill", function (fill, target) {
+     return chart.get("colors").getIndex(series.columns.indexOf(target));
+   });
+   
+   series.columns.template.adapters.add("stroke", function (stroke, target) {
+     return chart.get("colors").getIndex(series.columns.indexOf(target));
+   });
+   
+   
+   // Set data
+   var data = [{
+     country: "USA",
+     value: 2025
+   }, {
+     country: "China",
+     value: 1882
+   }, {
+     country: "Japan",
+     value: 1809
+   }, {
+     country: "Germany",
+     value: 1322
+   }, {
+     country: "UK",
+     value: 1122
+   }, {
+     country: "France",
+     value: 1114
+   }, {
+     country: "India",
+     value: 984
+   }, {
+     country: "Spain",
+     value: 711
+   }, {
+     country: "Netherlands",
+     value: 665
+   }, {
+     country: "South Korea",
+     value: 443
+   }, {
+     country: "Canada",
+     value: 441
+   }];
+   
+   xAxis.data.setAll(data);
+   series.data.setAll(data);
+   
+   
+   // Make stuff animate on load
+   // https://www.amcharts.com/docs/v5/concepts/animations/
+   series.appear(1000);
+   chart.appear(1000, 100);
+   
+   }); // end am5.ready()
+   </script>
+
+
+
+<script>
+   am5.ready(function() {
+   
+   
+   // Create root element
+   // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+   var root = am5.Root.new("chartdiv2");
+   
+   // Set themes
+   // https://www.amcharts.com/docs/v5/concepts/themes/
+   root.setThemes([am5themes_Animated.new(root)]);
+   
+   // Create chart
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/
+   var chart = root.container.children.push(
+     am5xy.XYChart.new(root, {
+       panX: false,
+       panY: false,
+       wheelX: "panX",
+       wheelY: "zoomX",
+       paddingLeft: 0,
+       layout: root.verticalLayout
+     })
+   );
+   
+   // Add scrollbar
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/scrollbars/
+   chart.set(
+     "scrollbarX",
+     am5.Scrollbar.new(root, {
+       orientation: "horizontal"
+     })
+   );
+   
+   var data = [
+     {
+       year: "2016",
+       income: 23.5,
+       expenses: 21.1
+     },
+     {
+       year: "2017",
+       income: 26.2,
+       expenses: 30.5
+     },
+     {
+       year: "2018",
+       income: 30.1,
+       expenses: 34.9
+     },
+     {
+       year: "2019",
+       income: 29.5,
+       expenses: 31.1
+     },
+     {
+       year: "2020",
+       income: 30.6,
+       expenses: 28.2,
+       strokeSettings: {
+         stroke: chart.get("colors").getIndex(1),
+         strokeWidth: 3,
+         strokeDasharray: [5, 5]
+       }
+     },
+     {
+       year: "2021",
+       income: 34.1,
+       expenses: 32.9,
+       columnSettings: {
+         strokeWidth: 1,
+         strokeDasharray: [5],
+         fillOpacity: 0.2
+       },
+       info: "(projection)"
+     }
+   ];
+   
+   // Create axes
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+   var xRenderer = am5xy.AxisRendererX.new(root, {
+     minorGridEnabled: true,
+     minGridDistance: 60
+   });
+   var xAxis = chart.xAxes.push(
+     am5xy.CategoryAxis.new(root, {
+       categoryField: "year",
+       renderer: xRenderer,
+       tooltip: am5.Tooltip.new(root, {})
+     })
+   );
+   xRenderer.grid.template.setAll({
+     location: 1
+   })
+   
+   xAxis.data.setAll(data);
+   
+   var yAxis = chart.yAxes.push(
+     am5xy.ValueAxis.new(root, {
+       min: 0,
+       extraMax: 0.1,
+       renderer: am5xy.AxisRendererY.new(root, {
+         strokeOpacity: 0.1
+       })
+     })
+   );
+   
+   
+   // Add series
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+   
+   var series1 = chart.series.push(
+     am5xy.ColumnSeries.new(root, {
+       name: "Income",
+       xAxis: xAxis,
+       yAxis: yAxis,
+       valueYField: "income",
+       categoryXField: "year",
+       tooltip: am5.Tooltip.new(root, {
+         pointerOrientation: "horizontal",
+         labelText: "{name} in {categoryX}: {valueY} {info}"
+       })
+     })
+   );
+   
+   series1.columns.template.setAll({
+     tooltipY: am5.percent(10),
+     templateField: "columnSettings"
+   });
+   
+   series1.data.setAll(data);
+   
+   var series2 = chart.series.push(
+     am5xy.LineSeries.new(root, {
+       name: "Expenses",
+       xAxis: xAxis,
+       yAxis: yAxis,
+       valueYField: "expenses",
+       categoryXField: "year",
+       tooltip: am5.Tooltip.new(root, {
+         pointerOrientation: "horizontal",
+         labelText: "{name} in {categoryX}: {valueY} {info}"
+       })
+     })
+   );
+   
+   series2.strokes.template.setAll({
+     strokeWidth: 3,
+     templateField: "strokeSettings"
+   });
+   
+   
+   series2.data.setAll(data);
+   
+   series2.bullets.push(function () {
+     return am5.Bullet.new(root, {
+       sprite: am5.Circle.new(root, {
+         strokeWidth: 3,
+         stroke: series2.get("stroke"),
+         radius: 5,
+         fill: root.interfaceColors.get("background")
+       })
+     });
+   });
+   
+   chart.set("cursor", am5xy.XYCursor.new(root, {}));
+   
+   // Add legend
+   // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+   var legend = chart.children.push(
+     am5.Legend.new(root, {
+       centerX: am5.p50,
+       x: am5.p50
+     })
+   );
+   legend.data.setAll(chart.series.values);
+   
+   // Make stuff animate on load
+   // https://www.amcharts.com/docs/v5/concepts/animations/
+   chart.appear(1000, 100);
+   series1.appear();
+   
+   
+   }); // end am5.ready()
+   </script>
+
+
+
+
+
+
+
+<script>
+
+
+   var options = {
+             series: [{
+             name: 'Servings',
+             data: [44, 55, 41, 67, 22, 43, 21, 33, 45, 31, 87, 65, 35]
+           }],
+             annotations: {
+             points: [{
+               x: 'Bananas',
+               seriesIndex: 0,
+               label: {
+                 borderColor: '#775DD0',
+                 offsetY: 0,
+                 style: {
+                   color: '#fff',
+                   background: '#775DD0',
+                 },
+                 text: 'Bananas are good',
+               }
+             }]
+           },
+           chart: {
+             height: 350,
+             type: 'bar',
+           },
+           plotOptions: {
+             bar: {
+               borderRadius: 10,
+               columnWidth: '50%',
+             }
+           },
+           dataLabels: {
+             enabled: false
+           },
+           stroke: {
+             width: 2
+           },
+           
+           grid: {
+             row: {
+               colors: ['#fff', '#f2f2f2']
+             }
+           },
+           xaxis: {
+             labels: {
+               rotate: -45
+             },
+             categories: ['Apples', 'Oranges', 'Strawberries', 'Pineapples', 'Mangoes', 'Bananas',
+               'Blackberries', 'Pears', 'Watermelons', 'Cherries', 'Pomegranates', 'Tangerines', 'Papayas'
+             ],
+             tickPlacement: 'on'
+           },
+           yaxis: {
+             title: {
+               text: 'Servings',
+             },
+           },
+           fill: {
+             type: 'gradient',
+             gradient: {
+               shade: 'light',
+               type: "horizontal",
+               shadeIntensity: 0.25,
+               gradientToColors: undefined,
+               inverseColors: true,
+               opacityFrom: 0.85,
+               opacityTo: 0.85,
+               stops: [50, 0, 100]
+             },
+           }
+           };
+   
+           var chart = new ApexCharts(document.querySelector("#chart"), options);
+           chart.render();
+   
+   
+   </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+    function updateTime() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // Handle midnight
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        seconds = seconds < 10 ? '0' + seconds : seconds;
+        var timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+        document.getElementById('live-time').textContent = timeString;
+    }
+    
+    // Update time every second
+    setInterval(updateTime, 1000);
+    
+    // Initial call to display time immediately
+    updateTime();
+ </script>
+
+
+<script>
+   $(document).ready( function () {
+       $('#myDataTable').DataTable( {
+       "pageLength": 10
+   });
+   } );
+   
+   
+</script>
+<script>    
+   var table = $('#myDataTableUsersOnline').DataTable( {
+       serverSide: false,
+       "ajax": {url:"/current/",dataSrc:""} ,
+       "columns": [
+           { "data": "name" },
+           { "data": "show" },
+           { "data": "answered" },
+       ],
+       "paging": false,
+       "searching": true,
+       order: [[2, 'desc']],
+       
+   }
+       
+   );
+   
+   setInterval(function(){
+   table.ajax.reload();
+   },5000);
+   $.fn.dataTable.ext.errMode = 'throw';
+</script>
+<script src="{% static 'libs/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+<script>
+   function beep() {
+       var snd = new Audio("data:audio/wav;base64,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qJrx4KOQjahZxWbcZgztj2c49nKmkId44S71j0c8eV9yDK6uPRzx5X18eDvjvQ6yKo9ZSS6l//8elePK/Lf//IInrOF/FvDoADYAGBMGb7FtErm5MXMlmPAJQVgWta7Zx2go+8xJ0UiCb8LHHdftWyLJE0QIAIsI+UbXu67dZMjmgDGCGl1H+vpF4NSDckSIkk7Vd+sxEhBQMRU8j/12UIRhzSaUdQ+rQU5kGeFxm+hb1oh6pWWmv3uvmReDl0UnvtapVaIzo1jZbf/pD6ElLqSX+rUmOQNpJFa/r+sa4e/pBlAABoAAAAA3CUgShLdGIxsY7AUABPRrgCABdDuQ5GC7DqPQCgbbJUAoRSUj+NIEig0YfyWUho1VBBBA//uQZB4ABZx5zfMakeAAAAmwAAAAF5F3P0w9GtAAACfAAAAAwLhMDmAYWMgVEG1U0FIGCBgXBXAtfMH10000EEEEEECUBYln03TTTdNBDZopopYvrTTdNa325mImNg3TTPV9q3pmY0xoO6bv3r00y+IDGid/9aaaZTGMuj9mpu9Mpio1dXrr5HERTZSmqU36A3CumzN/9Robv/Xx4v9ijkSRSNLQhAWumap82WRSBUqXStV/YcS+XVLnSS+WLDroqArFkMEsAS+eWmrUzrO0oEmE40RlMZ5+ODIkAyKAGUwZ3mVKmcamcJnMW26MRPgUw6j+LkhyHGVGYjSUUKNpuJUQoOIAyDvEyG8S5yfK6dhZc0Tx1KI/gviKL6qvvFs1+bWtaz58uUNnryq6kt5RzOCkPWlVqVX2a/EEBUdU1KrXLf40GoiiFXK///qpoiDXrOgqDR38JB0bw7SoL+ZB9o1RCkQjQ2CBYZKd/+VJxZRRZlqSkKiws0WFxUyCwsKiMy7hUVFhIaCrNQsKkTIsLivwKKigsj8XYlwt/WKi2N4d//uQRCSAAjURNIHpMZBGYiaQPSYyAAABLAAAAAAAACWAAAAApUF/Mg+0aohSIRobBAsMlO//Kk4soosy1JSFRYWaLC4qZBYWFRGZdwqKiwkNBVmoWFSJkWFxX4FFRQWR+LsS4W/rFRb/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////VEFHAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU=");
+       snd.play();
+   }
+
+   function CallMethodForDataPerMonthorDay(url, divClassData, divClassTimestamps) {
+       //show loading... image
+       $.ajax({
+           type: 'GET',
+           url: url,
+           success: function(response) {
+               // on successfull creating object
+               $(divClassData).text(response['total_chats']);
+               var now = new Date(Date.now());
+               $(divClassTimestamps).text(now.toLocaleString())
+           },
+           error: function(response) {
+               // alert the error if any error occured
+               console.log(response);
+           }
+       });
+
+
+   }
+
+
+
+
+   function CallMethodForServices(url, divClass) {
+       //show loading... image
+
+       $.ajax({
+           type: 'GET',
+           url: url,
+           contentType: 'application/json;',
+           success: function(result) {
+               if (result['service'] == 'available') {
+                   $(divClass).html('<i class="far fa-smile"></i>')
+               } else {
+                   $(divClass).html('<i class="fas fa-frown-open animate__animated"></i>');
+                   //beep();
+               }
+               var now = new Date(Date.now());
+               $(".time_now_service ").text(now.toLocaleString())
+
+           }
+       });
+   }
+
+   CallMethodForDataPerMonthorDay("{% url 'get_total_chat_for_today' %}", ".total_chat_today", ".time_now_this_day")
+   CallMethodForDataPerMonthorDay("{% url 'get_total_chat_for_this_month' %}", ".total_chat_this_month", ".time_now_this_month")
+   CallMethodForServices("{% url 'service_web' %}", ".web-service")
+   CallMethodForServices("{% url 'service_sms' %}", ".sms-service")
+   CallMethodForServices("{% url 'service_fr' %}", ".fr-service")
+
+   setInterval(function() {
+       CallMethodForDataPerMonthorDay("{% url 'get_total_chat_for_today' %}", ".total_chat_today", ".time_now_this_day")
+       CallMethodForDataPerMonthorDay("{% url 'get_total_chat_for_this_month' %}", ".total_chat_this_month", ".time_now_this_month")
+
+       CallMethodForServices("{% url 'service_web' %}", ".web-service")
+       CallMethodForServices("{% url 'service_sms' %}", ".sms-service")
+       CallMethodForServices("{% url 'service_fr' %}", ".fr-service")
+   }, 6000); // each 10 seconds
+
+
+
+
+
+
+
+
+
+
+
+
+   var url = "{% url 'get_data_for_chart' %}";
+
+var current_year = new Date().getFullYear();
+var last_year = new Date().getFullYear() - 1;
+var two_years_ago = new Date().getFullYear() - 2;
+
+$.getJSON(url, function(response) {
+
+   console.log("É------------------------------------------------------------------------------------------------")
+   console.log(response)
+
+    var options = {
+            series: [{
+                name: last_year,
+                type: "column",
+                data: response['last_year'],
+            }, {
+                name: current_year,
+                type: "line",
+                data: response['this_year'],
+            }, {
+                name: two_years_ago,
+                type: "area",
+                data: response['two_years_ago'],
+            }],
+            chart: {
+                height: 280,
+                type: "line",
+                toolbar: {
+                    show: !1
+                }
+            },
+            stroke: {
+                width: [0, 3],
+                curve: "smooth"
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: !1,
+                    columnWidth: "20%"
+                }
+            },
+            dataLabels: {
+                enabled: !1
+            },
+            legend: {
+                show: !1
+            },
+            colors: ["#5664d2", "#1cbb8c", "#fffbc1"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        },
+        chart = new ApexCharts(document.querySelector("#line-column-chart"), options);
+    chart.render();
+
+
+});
+
+
+
+
+
+
+
+
+
+
+
+   $(function() {
+       $('[data-toggle="tooltip"]').tooltip()
+   });
+                                   
+</script>
+{% endblock %}

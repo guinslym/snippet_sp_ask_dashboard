@@ -1,0 +1,47 @@
+{% block content %}
+<H1><a href="{% url 'report_all_' %}">Return to All Report Page</a></H1>
+
+<!-- Add Bootstrap CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+<!-- Include jQuery first, then Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<!-- Include the necessary CSS and JS for PivotTable.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pivottable/2.23.0/pivot.min.css" />
+
+<div id="output"></div>
+
+<!-- jQuery UI for pivot table sorting -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/themes/base/jquery-ui.min.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.0/jquery-ui.min.js"></script>
+
+<!-- MetisMenu -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.7/metisMenu.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/metisMenu/3.0.7/metisMenu.min.js"></script>
+
+
+
+<script type="text/javascript">
+    $(function() {
+        // JSON data passed from the Django view
+        var userQueueData = {{ user_queue_data|safe }};
+        
+        // Create the pivot table
+        $("#output").pivotUI(
+            userQueueData,
+            {
+                rows: ["operator"],
+                cols: ["queue"],
+                vals: ["duration"],
+                aggregatorName: "Count",
+                rendererName: "Table"
+            }
+        );
+    });
+</script>
+
+{% endblock %}
